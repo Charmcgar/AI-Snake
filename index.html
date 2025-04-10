@@ -57,7 +57,8 @@ const generationDisplay = document.getElementById('generation');
 const resetButton = document.getElementById('reset');
 
 const gridSize = 15;
-const gridCount = canvas.width / gridSize;
+const gridCountX = canvas.width / gridSize;
+const gridCountY = canvas.height / gridSize;
 
 let snake = [{ x: 10, y: 10 }];
 let food = { x: 5, y: 5 };
@@ -95,16 +96,17 @@ function updateSnake() {
     const head = { x: snake[0].x + dx, y: snake[0].y + dy };
 
     // Check if the snake hits the boundaries
-    if (head.x < 0 || head.y < 0 || head.x >= gridCount || head.y >= gridCount) {
+    if (head.x < 0 || head.y < 0 || head.x >= gridCountX || head.y >= gridCountY) {
         resetGame();
         return;
     }
 
+    // Check if the snake eats the food
     if (head.x === food.x && head.y === food.y) {
         score++;
         food = {
-            x: Math.floor(Math.random() * gridCount),
-            y: Math.floor(Math.random() * gridCount)
+            x: Math.floor(Math.random() * gridCountX),
+            y: Math.floor(Math.random() * gridCountY)
         };
     } else {
         snake.pop();
@@ -125,8 +127,8 @@ function getInputs() {
     const distToFoodY = food.y - head.y;
     return [
         dx, dy,
-        distToFoodX / gridCount,
-        distToFoodY / gridCount
+        distToFoodX / gridCountX,
+        distToFoodY / gridCountY
     ];
 }
 

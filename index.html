@@ -45,7 +45,7 @@
 <canvas id="game" width="900" height="600"></canvas>
 <div class="controls">
     <label for="speed">Speed: </label>
-   <input type="range" id="speed" min="50" max="5000" value="100">
+    <input type="range" id="speed" min="50" max="5000" value="100">
     <div>Generation: <span id="generation">0</span></div>
     <button id="reset">Reset</button>
 </div>
@@ -94,6 +94,12 @@ function drawGame() {
 function updateSnake() {
     const head = { x: snake[0].x + dx, y: snake[0].y + dy };
 
+    // Check if the snake hits the boundaries
+    if (head.x < 0 || head.y < 0 || head.x >= gridCount || head.y >= gridCount) {
+        resetGame();
+        return;
+    }
+
     if (head.x === food.x && head.y === food.y) {
         score++;
         food = {
@@ -104,7 +110,8 @@ function updateSnake() {
         snake.pop();
     }
 
-    if (head.x < 0 || head.y < 0 || head.x >= gridCount || head.y >= gridCount || snake.some(s => s.x === head.x && s.y === head.y)) {
+    // Check if the snake runs into itself
+    if (snake.some(s => s.x === head.x && s.y === head.y)) {
         resetGame();
         return;
     }
